@@ -88,4 +88,4 @@ myServer.listen(8000, () => console.log("Server Started"));
 // Visibility	                    Visible in URL	                            Hidden from URL
 // Cacheable?	                Yes (can be cached by browsers)           	  No (usually not cached)
 // Data size	                    Limited (URL length)	                     No practical limit (larger data allowed)
-// Use cases	                  Search, read-only fetches	                   Form submissions, updates
+// Use cases	                  Search, read-only fetches	                    Form submissions, updates
