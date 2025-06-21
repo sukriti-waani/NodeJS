@@ -79,3 +79,13 @@ const myServer = http.createServer((req, res) => {
 
 // Start the server and listen on port 8000
 myServer.listen(8000, () => console.log("Server Started"));
+
+
+
+// Aspect	                            GET	                                         POST
+// Purpose	                        Retrieve data	                            Send (submit) data
+// Where is data sent?	          URL query string	                              Request body
+// Visibility	                    Visible in URL	                            Hidden from URL
+// Cacheable?	                Yes (can be cached by browsers)           	  No (usually not cached)
+// Data size	                    Limited (URL length)	                     No practical limit (larger data allowed)
+// Use cases	                  Search, read-only fetches	                   Form submissions, updates
