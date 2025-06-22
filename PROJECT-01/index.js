@@ -1,11 +1,15 @@
 const express = require("express");
+const fs = require("fs");
 const users = require("./MOCK_DATA.json");
 
 const app = express();
 const PORT = 8000;
 
-// Routes
+// Middleware - Plugin
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // Added to parse JSON bodies
 
+// Routes
 app.get("/users", (req, res) => {
   // Create an HTML unordered list (ul) as a string
   const html = `
@@ -24,23 +28,25 @@ app.get("/users", (req, res) => {
 
 // REST API
 app.get("/api/users", (req, res) => {
+  // Return all users as JSON
   return res.json(users);
-}) 
- // Handle PATCH request to update a specific user (currently pending implementation)
-  .patch((req, res) => {
-    // In real use, you'd update the user's data here using req.body (e.g., with express.json() middleware)
-    
-    // Send back a JSON response indicating the update is pending
-    return res.json({ status: "Pending" });
-  })
+});
 
-  // Handle DELETE request to remove a specific user (currently pending implementation)
-  .delete((req, res) => {
-    // In real use, you'd remove the user from the data store here
-    
-    // Send back a JSON response indicating deletion is pending
-    return res.json({ status: "Pending" });
-  });
+// Handle PATCH request to update a specific user (currently pending implementation)
+app.patch("/api/users", (req, res) => {
+  // In real use, you'd update the user's data here using req.body (e.g., with express.json() middleware)
+
+  // Send back a JSON response indicating the update is pending
+  return res.json({ status: "Pending" });
+});
+
+// Handle DELETE request to remove a specific user (currently pending implementation)
+app.delete("/api/users", (req, res) => {
+  // In real use, you'd remove the user from the data store here
+
+  // Send back a JSON response indicating deletion is pending
+  return res.json({ status: "Pending" });
+});
 
 app.get("/api/users/:id", (req, res) => {
   // Extract the 'id' parameter from the request URL and convert it from string to number
@@ -54,14 +60,19 @@ app.get("/api/users/:id", (req, res) => {
   return res.json(user);
 });
 
+// POST route to create a new user (only one POST route kept)
 app.post("/api/users", (req, res) => {
-  // TODO : Create new user
-  return res.json({ status: "pending" });
+  const body = req.body;
+  users.push({ ...body, id: users.length + 1 });
+  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
+    // Send back a JSON response indicating the creation is pending
+    return res.json({ status: "pending" });
+  });
 });
 
 app.patch("/api/users/:id", (req, res) => {
   // TODO : Edit the user with id
-  return res.json({ status: "pending" });
+  return res.json({ status: "success", id: users.length });
 });
 
 app.delete("/api/users/:id", (req, res) => {
@@ -69,4 +80,5 @@ app.delete("/api/users/:id", (req, res) => {
   return res.json({ status: "pending" });
 });
 
+// Start the server and listen on the defined PORT
 app.listen(PORT, () => console.log(`Server Started at PORT : ${PORT}`));
