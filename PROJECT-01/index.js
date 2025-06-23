@@ -9,6 +9,27 @@ const PORT = 8000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // Added to parse JSON bodies
 
+app.use((req, res, next) => {
+  // console.log("Hello from midlleware 1");
+  // return res.json({mgs: "Hello from middleware 1"});
+  // Append data to a file named 'log.txt' asynchronously
+  fs.appendFile(
+    "log.txt",
+    // The data to append: a newline followed by timestamp, IP, HTTP method, and path
+    `\n ${Date.now()}: ${req.ip} ${req.method}: ${req.path}`,
+    // Callback function executed after append operation completes
+    (err, data) => {
+      // Call the next middleware or route handler in the stack
+      next();
+    }
+  );
+});
+
+// app.use((req, res, next) => {
+//   console.log("Hello from midlleware 2", req.myUserName);
+//   next();
+// });
+
 // Routes
 app.get("/users", (req, res) => {
   // Create an HTML unordered list (ul) as a string
