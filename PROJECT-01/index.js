@@ -1,3 +1,5 @@
+// npm i nodemon
+// use "HTTP response status code" website for reading 
 const express = require("express");
 const fs = require("fs");
 const users = require("./MOCK_DATA.json");
@@ -86,10 +88,13 @@ app.get("/api/users/:id", (req, res) => {
 // POST route to create a new user (only one POST route kept)
 app.post("/api/users", (req, res) => {
   const body = req.body;
+  if(!body || !body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title) {
+    return res.status(400).json({msg: 'All fields are required'})
+  }
   users.push({ ...body, id: users.length + 1 });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
     // Send back a JSON response indicating the creation is pending
-    return res.json({ status: "pending" });
+    return res.status(201).json({ status: "pending" });
   });
 });
 
