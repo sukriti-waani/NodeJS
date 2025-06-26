@@ -4,3 +4,17 @@
  1750697831263: ::1 GET: /api/users
  1750699413312: ::1 GET: /api/users
  1750699447531: ::1 GET: /api/users
+ 1750701483835: ::1 GET: /api/users
+ 1750701549269: ::1 GET: /api/users
+ 1750701565985: ::1 GET: /api/users
+ 1750701654395: ::1 GET: /api/users
+ 1750701659870: ::1 POST: /api/users
+ 1750701785626: ::1 POST: /api/users
+ 1750701995781: ::1 GET: /about
+ 1750702003601: ::1 GET: /users
+ 1750702003676: ::1 GET: /favicon.ico
+ 1750702096299: ::1 POST: /api/users
+ 1750702119108: ::1 POST: /api/users
+ 1750702145318: ::1 POST: /api/users
+ 1750702157061: ::1 POST: /api/users
+ 1750702212444: ::1 GET: /api/users
