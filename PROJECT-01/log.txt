@@ -18,3 +18,5 @@
  1750702145318: ::1 POST: /api/users
  1750702157061: ::1 POST: /api/users
  1750702212444: ::1 GET: /api/users
+ 1751044586720: ::1 GET: /api/users
+ 1751044775302: ::1 GET: /api/users

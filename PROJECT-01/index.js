@@ -5,7 +5,7 @@
 const express = require("express"); // Import the Express framework
 const fs = require("fs"); // Import Node's File System module for file operations
 const { logReqRes } = require("./middlewares"); // Import custom middleware to log requests and responses
-const { connectMongoDb } = require("./connection"); // Import function to connect to MongoDB
+const { connectMongoDb } = require("./connection"); // Import function to connect to  MongoDB
 const users = require("./MOCK_DATA.json"); // Import local static user data (used only if needed for testing)
 const userRouter = require("./routes/user"); // Import routes defined for user-related operations
 
@@ -32,7 +32,7 @@ app.use(logReqRes("log.txt"));
 // --------------Routes----------------
 // Mount the user router on the "/user" path
 // Any route in userRouter will be prefixed with "/user" (e.g., "/user/:id", "/user/")
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 
 // --------------Start the Server----------------
 // Start the server and listen on the defined port
