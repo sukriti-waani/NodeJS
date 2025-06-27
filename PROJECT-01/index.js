@@ -15,7 +15,8 @@ const PORT = 8000; // Define the port number on which the server will run
 // --------------Connection to MongoDb----------------
 // Connect to the MongoDB database at the specified URI (localhost in this case)
 // "app-1" is the name of the database that will be created/used
-connectMongoDb("mongodb://127.0.0.1:27017/app-1");
+connectMongoDb("mongodb://127.0.0.1:27017/app-1")
+.then(() => console.log('Mongodb connected!'));
 
 // --------------Middleware----------------
 // Parse incoming URL-encoded data from forms (e.g., from HTML forms)
@@ -31,7 +32,7 @@ app.use(logReqRes("log.txt"));
 // --------------Routes----------------
 // Mount the user router on the "/user" path
 // Any route in userRouter will be prefixed with "/user" (e.g., "/user/:id", "/user/")
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 
 // --------------Start the Server----------------
 // Start the server and listen on the defined port
