@@ -1,5 +1,5 @@
-// Import nanoid for generating unique short IDs
-const { nanoid } = require("nanoid");
+// Import shortid for generating unique short IDs
+const { shortid } = require("shortid");
 const URL = require("../models/url");
 
 async function handleGenerateNewShortURL(req, res) {
@@ -12,7 +12,7 @@ async function handleGenerateNewShortURL(req, res) {
   }
 
   // Generate a unique 8-character short ID using nanoid
-  const shortID = nanoid(8);
+  const shortID = shortid();
 
   await URL.create({
     shortId: shortID, // Store the generated short ID
