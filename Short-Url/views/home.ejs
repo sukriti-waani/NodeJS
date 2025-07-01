@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+    </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home Page</title>
   </head>
 
   <body>
-    <h1>Hey from Server</h1>
+    <h1>Url Shortener</h1>
 
-    <ul>
-      <% urls.forEach(url => { %>
-      <!-- EJS loop: iterate over the 'urls' array passed from the server.
-           For each element (called 'url'), the following block will run -->
+    <% if(id) { %>
+    <!-- This is a server-side condition using EJS.
+       It checks if the variable `id` is defined (not null or undefined).
+       If true, it will render the block below. -->
 
-      <li><%= url.shortId %></li>
-      <!-- Output the 'shortId' property of the current 'url' object as a list item.
-             <%= %> means the value will be inserted and HTML-escaped -->
+    <p>URL Generated: http://localhost:8001/url/<%= id %></p>
+    <!-- If `id` exists, display a message showing the full short URL.
+       <%= id %> outputs the value of `id` into the HTML.
+       The short URL is formed using the current server path + shortId. -->
 
-      <% }) %>
-    </ul>
+    <% } %>
+    <!-- This ends the EJS `if` block. Nothing will render if `id` is false. -->
+
+    <div>
+      <form method="POST" action="/url">
+        <!-- A form that sends a POST request to the `/url` endpoint on the server.
+         This is where the user submits the original URL to be shortened. -->
+
+        <label>Enter your Original URL</label>
+        <!-- A label for the input field. It’s good for accessibility and UX. -->
+
+        <input type="text" name="url" placeholder="https://example.com" />
+        <!-- Input field where the user types the original URL. `name="url"` is the key by which the server can access this data via `req.body.url`.
+        The placeholder shows a sample URL format to guide the user. -->
+
+        <button type="submit">Generate</button>
+        <!-- Submit button. When clicked, it sends the form data to the server. -->
+      </form>
+    </div>
   </body>
 </html>

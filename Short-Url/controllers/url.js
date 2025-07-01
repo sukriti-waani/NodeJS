@@ -20,8 +20,9 @@ async function handleGenerateNewShortURL(req, res) {
     visitedHistory: [], // Initialize visit history as an empty array
   });
 
-  // Respond back to the client with the generated short ID
-  return res.json({ id: shortID });
+  return res.render("home", {
+    id: shortID,
+  });
 }
 
 async function handleGetAnalytics(req, res) {
