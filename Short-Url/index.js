@@ -1,4 +1,7 @@
+// use "EJS express" for documentation reading
+
 const express = require("express");
+const path = require("path");
 const urlRoute = require("./routes/url");
 const { connectToMongoDB } = require("./connect");
 const URL = require("./models/url");
@@ -10,12 +13,33 @@ connectToMongoDB("mongodb://localhost:27017/short-url").then(() =>
   console.log("Mongodb connected")
 );
 
-app.use(express.json());
+app.set("view engine", "ejs"); // This tells Express to use "EJS" as the templating/view engine.
+// So when we use `res.render("home")`, it will look for `home.ejs` in the views folder.
+
+app.set("views", path.resolve("./views"));
+// This sets the directory for the views (EJS files).
+// `path.resolve("./views")` ensures the absolute path to the "views" folder is used,
+// allowing `res.render()` to find templates inside it correctly.
+
+app.use(express.json()); // This middleware allows your Express app to automatically parse incoming JSON payloads.
+// Required for handling JSON data in POST/PUT requests.
+
+app.get("/test", async (req, res) => {
+  const allUrls = await URL.find({}); // This route handles GET requests to `/test`.
+  // It fetches all documents from the `URL` collection in MongoDB using Mongoose's `find({})`.
+
+  return res.render("home", {
+    urls: allUrls,
+  });  // This renders the EJS template named "home.ejs" from the "views" folder.
+  // It passes the retrieved `allUrls` array to the template as a variable named `urls`.
+  // In the EJS file, you can now loop through `urls` and display their contents.
+});
+
 
 app.use("/url", urlRoute);
 
 // Define a GET route with a dynamic parameter ':shortId'
-app.get("/:shortId", async (req, res) => {
+app.get("/url/:shortId", async (req, res) => {
   // Extract the 'shortId' from the URL parameters (e.g., /abc123 -> shortId = 'abc123')
   const shortId = req.params.shortId;
 
