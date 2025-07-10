@@ -1,3 +1,5 @@
+// npm i uuid (for generating unique id)
+const {v4: uuidv4} = require('uuid')
 const User = require("../models/user");
 
 async function handleUserSignUp(req, res) {
@@ -19,6 +21,8 @@ async function handleUserLogin(req, res) {
       error: "Invalid Username or Password",
     });
   }
+
+  const sessionId = uuidv4();
 
   return res.redirect("/");
 }
