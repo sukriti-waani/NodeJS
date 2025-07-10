@@ -12,56 +12,42 @@
   </head>
 
   <body>
-    <h1>Url Shortener</h1>
+    <h1>URL Shortener</h1>
 
-    <% if(id) { %>
-    <!-- This is a server-side condition using EJS.
-       It checks if the variable `id` is defined (not null or undefined).
-       If true, it will render the block below. -->
-
-    <p>URL Generated: http://localhost:8001/url/<%= id %></p>
-    <!-- If `id` exists, display a message showing the full short URL.
-       <%= id %> outputs the value of `id` into the HTML.
-       The short URL is formed using the current server path + shortId. -->
-
+    <% if (id) { %>
+      <p>URL Generated: http://localhost:8001/url/<%= id %></p>
     <% } %>
-    <!-- This ends the EJS `if` block. Nothing will render if `id` is false. -->
 
     <div>
       <form method="POST" action="/url">
-        <!-- A form that sends a POST request to the `/url` endpoint on the server.
-         This is where the user submits the original URL to be shortened. -->
-
         <label>Enter your Original URL</label>
-        <!-- A label for the input field. It’s good for accessibility and UX. -->
-
         <input type="text" name="url" placeholder="https://example.com" />
-        <!-- Input field where the user types the original URL. `name="url"` is the key by which the server can access this data via `req.body.url`.
-        The placeholder shows a sample URL format to guide the user. -->
-
         <button type="submit">Generate</button>
-        <!-- Submit button. When clicked, it sends the form data to the server. -->
       </form>
     </div>
 
     <div>
-      <% if(locals.urls) { %>
-      <table>
-        <thead>
-          <th>S. No</th>
-          <th>ShortID</th>
-          <th>Redirect</th>
-          <th>Clicks</th>
-        </thead>
-        <tbody>
-          <% urls.forEach(url => { %>
-          <td><%= index + 1 %></td>
-          <td><%= url.shortId %></td>
-          <td><%= url.RedirectURL %></td>
-          <td><%= url.visitHistory.length %></td>
-          <% }) %>
-        </tbody>
-      </table>
+      <% if (locals.urls && urls.length > 0) { %>
+        <table border="1" cellspacing="0" cellpadding="8">
+          <thead>
+            <tr>
+              <th>S. No</th>
+              <th>Short ID</th>
+              <th>Redirect URL</th>
+              <th>Clicks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% urls.forEach((url, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= url.shortId %></td>
+                <td><a href="<%= url.redirectURL %>" target="_blank"><%= url.redirectURL %></a></td>
+                <td><%= url.visitHistory.length %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
       <% } %>
     </div>
   </body>
