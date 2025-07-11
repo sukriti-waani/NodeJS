@@ -1,13 +1,13 @@
 // Install with: npm i uuid
 // Import `v4` method from the 'uuid' package and rename it as 'uuidv4'
 // Used to generate a unique session ID for each user
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 // Import the User model for interacting with the users collection in MongoDB
 const User = require("../models/user");
 
 // Import the setUser function for mapping session IDs to users (in-memory session store)
-const { setUser } = require('../service/auth');
+const { setUser } = require("../service/auth");
 
 /**
  * Controller to handle user signup logic
@@ -45,14 +45,11 @@ async function handleUserLogin(req, res) {
     });
   }
 
-  // Generate a unique session ID for the logged-in user
-  const sessionId = uuidv4();
+  // Store the user object in the session map
+  const token = setUser(user);
 
-  // Store the session ID and user object in the session map
-  setUser(sessionId, user);
-
-  // Set a cookie named 'uuid' in the browser with the generated session ID
-  res.cookie("uuid", sessionId);
+  // Set a cookie named 'uid' in the browser with the generated token
+  res.cookie("uid", token);
 
   // Redirect the user to the home page upon successful login
   return res.redirect("/");
