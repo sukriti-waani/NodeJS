@@ -2,7 +2,9 @@
 
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 const { connectToMongoDB } = require("./connect");
+const { restrictToLoggedinUserOnly, checkAuth } = require("./middlewares/auth");
 
 const URL = require("./models/url");
 
@@ -17,10 +19,14 @@ connectToMongoDB("mongodb://localhost:27017/short-url").then(() =>
   console.log("Mongodb connected")
 );
 
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
+
 app.use(express.json()); // This middleware allows your Express app to automatically parse incoming JSON payloads.
 // // Required for handling JSON data in POST/PUT requests.
 
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.set("view engine", "ejs"); // This tells Express to use "EJS" as the templating/view engine.
 // So when we use `res.render("home")`, it will look for `home.ejs` in the views folder.
@@ -41,9 +47,9 @@ app.set("views", path.resolve("./views"));
 //   // In the EJS file, you can now loop through `urls` and display their contents.
 // });
 
-app.use("/url", urlRoute);
-app.use("/user", userRoute)
-app.use("/", staticRoute);
+app.use("/url", restrictToLoggedinUserOnly, urlRoute);
+app.use("/user", userRoute);
+app.use("/", checkAuth, staticRoute);
 
 // Define a GET route with a dynamic parameter ':shortId'
 app.get("/url/:shortId", async (req, res) => {

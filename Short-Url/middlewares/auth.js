@@ -9,7 +9,7 @@ const { getUser } = require("../service/auth");
  */
 async function restrictToLoggedinUserOnly(req, res, next) {
   // Read the 'uid' cookie from the incoming request
-  const userUid = req.cookies.uid;
+  const userUid = req.cookies?.uid;
 
   // If no session ID is present, redirect to the login page
   if (!userUid) return res.redirect("/login");
@@ -27,6 +27,21 @@ async function restrictToLoggedinUserOnly(req, res, next) {
   next();
 }
 
+async function checkAuth(req, res, next) {
+  // Read the 'uid' cookie from the incoming request
+  const userUid = req.cookies?.uid;
+
+  // Retrieve the user associated with the session ID from the session map
+  const user = getUser(userUid);
+
+  // Attach the user object to the request so that it can be accessed in the next middleware/route
+  req.user = user;
+
+  // Call next() to pass control to the next middleware or route handler
+  next();
+}
+
 module.exports = {
   restrictToLoggedinUserOnly,
+  checkAuth,
 };
