@@ -46,6 +46,7 @@ function setUser(user) {
     {
       _id: user._id, // Embed user's unique ID in the token payload
       email: user.email, // Also include user's email in the payload
+      role: user.role,
     },
     secret // Use the secret key to sign the token
   );

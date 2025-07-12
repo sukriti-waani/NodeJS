@@ -48,8 +48,8 @@ async function handleUserLogin(req, res) {
   // Store the user object in the session map
   const token = setUser(user);
 
-  // Set a cookie named 'uid' in the browser with the generated token
-  res.cookie("uid", token);
+  // Set a cookie named 'token' in the browser with the generated token
+  res.cookie("token", token);
 
   // Redirect the user to the home page upon successful login
   return res.redirect("/");
