@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Uploads</title>
+  </head>
+  <body>
+    <!-- 
+  This is an HTML form used to submit a file (like an image) to the server.
+  The form sends a POST request to the '/upload' route defined in your Express server.
+-->
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <!-- 
+    This input allows the user to select a file from their local system.
+    The 'name' attribute must match the name specified in the multer middleware: 
+    upload.single("profileImage"). 
+    So here 'profileImage' matches, ensuring the file is correctly captured on the server.
+  -->
+      <input type="file" name="profileImage" />
+
+      <button type="submit">Upload</button>
+    </form>
+  </body>
+</html>
