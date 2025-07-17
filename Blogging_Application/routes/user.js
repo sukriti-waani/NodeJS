@@ -16,6 +16,24 @@ router.get("/signup", (req, res) => {
   return res.render("signup");
 });
 
+// Define a POST route handler for '/signin'
+router.post("/signin", async (req, res) => {
+  
+  // Extract 'email' and 'password' from the request body (form data sent by the user)
+  const { email, password } = req.body;
+
+  // Call the static method 'matchPassword' on the 'user' model to authenticate the user
+  const user = await User.matchPassword(email, password);
+
+  // Log the authenticated user details (excluding sensitive data if handled correctly)
+  console.log("User", user);
+
+  // Redirect the user to the homepage after successful login
+  return res.redirect("/");
+
+});
+
+
 // Define a POST route for '/signup' to handle form submissions for user registration
 router.post("/signup", async (req, res) => {
   // Destructure fullName, email, and password from the request body (form data)

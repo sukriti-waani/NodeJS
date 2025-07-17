@@ -17,16 +17,15 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
-    // 'salt' field is used to store the unique salt string for password hashing
+    // 'salt' field stores the unique salt string for password hashing
     salt: {
       type: String,
-      required: true,
     },
-    // 'password' field stores the hashed password, must be unique and required
+    // 'password' field stores the hashed password, must be required
+    // Removed 'unique' constraint because different users can have the same hashed password by coincidence
     password: {
       type: String,
       required: true,
-      unique: true,
     },
     // 'profileImageURL' stores the URL of user's profile image with a default value if not provided
     profileImageURL: {
@@ -51,28 +50,55 @@ userSchema.pre("save", function (next) {
   // 'this' refers to the current user document
   const user = this;
 
-  // If the password field is not modified, skip hashing
-  if (!user.isModified("password")) return;
+  // If the password is not modified, skip hashing and proceed to the next middleware
+  if (!user.isModified("password")) return next();
 
-  // Generate a random salt of 16 bytes and convert it to a string
-  const salt = randomBytes(16).toString();
+  // Generate a random salt of 16 bytes and convert it to a hex string
+  const salt = randomBytes(16).toString("hex");
 
   // Create a hashed password using HMAC with SHA256 algorithm and the generated salt
   const hashedPassword = createHmac("sha256", salt)
-    .update(user.password) // Update HMAC with the user's plain password
-    .digest("hex"); // Output the hash as a hexadecimal string
+    .update(user.password)  // Use the plain password provided
+    .digest("hex");         // Generate the final hash in hexadecimal format
 
   // Store the generated salt in the user document
-  this.salt = salt;
+  user.salt = salt;
   // Store the hashed password in the user document
-  this.password = hashedPassword;
+  user.password = hashedPassword;
 
   // Proceed to the next middleware or save operation
   next();
 });
 
+// Define a static method 'matchPassword' on the userSchema for verifying user credentials
+userSchema.static("matchPassword", async function (email, password) {
+  // 'this' refers to the User model. Find the user by their email.
+  const user = await this.findOne({ email });
+
+  // If no user is found with the provided email, throw an error
+  if (!user) throw new Error("User not found!");
+
+  // Retrieve the salt stored in the user's record
+  const salt = user.salt;
+  // Retrieve the hashed password stored in the user's record
+  const hashedPassword = user.password;
+
+  // Hash the provided plain text password using the same salt
+  const userProvidedHash = createHmac("sha256", salt)
+    .update(password)
+    .digest("hex");
+
+  // Compare the hashed version of the provided password with the stored hash
+  if (hashedPassword !== userProvidedHash)
+    throw new Error("Incorrect Password");
+
+  // Return the user object excluding the password and salt for security
+  // Convert the Mongoose document to a plain object first
+  return { ...user.toObject(), password: undefined, salt: undefined };
+});
+
 // Create the User model from the defined schema
 const User = model("user", userSchema);
 
-// Export the User model for use in other files
+// Export the User model so it can be used in other files like routes or controllers
 module.exports = User;
