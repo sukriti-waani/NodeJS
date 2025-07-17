@@ -1,5 +1,5 @@
 // Import required functions from 'crypto' module for hashing and generating random bytes
-const {randomBytes, createHmac } = require("crypto");
+const { randomBytes, createHmac } = require("crypto");
 // Import Schema and model functions from 'mongoose' for defining and creating MongoDB models
 const { Schema, model } = require("mongoose");
 
@@ -56,11 +56,11 @@ userSchema.pre("save", function (next) {
 
   // Generate a random salt of 16 bytes and convert it to a string
   const salt = randomBytes(16).toString();
-  
+
   // Create a hashed password using HMAC with SHA256 algorithm and the generated salt
   const hashedPassword = createHmac("sha256", salt)
-    .update(user.password)  // Update HMAC with the user's plain password
-    .digest("hex");         // Output the hash as a hexadecimal string
+    .update(user.password) // Update HMAC with the user's plain password
+    .digest("hex"); // Output the hash as a hexadecimal string
 
   // Store the generated salt in the user document
   this.salt = salt;
