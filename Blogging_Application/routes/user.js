@@ -16,23 +16,29 @@ router.get("/signup", (req, res) => {
   return res.render("signup");
 });
 
-// Define a POST route handler for '/signin'
+// Define a POST route handler for the '/signin' endpoint
 router.post("/signin", async (req, res) => {
-  
-  // Extract 'email' and 'password' from the request body (form data sent by the user)
   const { email, password } = req.body;
+  try {
+    // Extract 'email' and 'password' from the request body (submitted form data)
+    const { email, password } = req.body;
 
-  // Call the static method 'matchPassword' on the 'user' model to authenticate the user
-  const user = await User.matchPassword(email, password);
+    // Call a static method 'matchPasswordAndGenerateToken' on the User model
+    // This method likely verifies the email and password and returns a JWT token if valid
+    const token = await User.matchPasswordAndGenerateToken(email, password);
 
-  // Log the authenticated user details (excluding sensitive data if handled correctly)
-  console.log("User", user);
+    // Log the generated token to the console for debugging purposes (ensure no sensitive data is exposed)
+    console.log("token", token);
 
-  // Redirect the user to the homepage after successful login
-  return res.redirect("/");
-
+    // Set the token in a cookie named 'token' and redirect the user to the homepage ('/')
+    // This enables the client to store the token for subsequent authenticated requests
+    return res.cookie("token", token).redirect("/");
+  } catch (error) {
+    return res.render("signin", {
+      error: "Incorrect Email or Password",
+    });
+  }
 });
-
 
 // Define a POST route for '/signup' to handle form submissions for user registration
 router.post("/signup", async (req, res) => {

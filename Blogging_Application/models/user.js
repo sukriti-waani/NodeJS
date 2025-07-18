@@ -2,6 +2,7 @@
 const { randomBytes, createHmac } = require("crypto");
 // Import Schema and model functions from 'mongoose' for defining and creating MongoDB models
 const { Schema, model } = require("mongoose");
+const { createTokenForUser } = require("../services/authentication");
 
 // Define a Mongoose schema for the 'User' model
 const userSchema = new Schema(
@@ -58,8 +59,8 @@ userSchema.pre("save", function (next) {
 
   // Create a hashed password using HMAC with SHA256 algorithm and the generated salt
   const hashedPassword = createHmac("sha256", salt)
-    .update(user.password)  // Use the plain password provided
-    .digest("hex");         // Generate the final hash in hexadecimal format
+    .update(user.password) // Use the plain password provided
+    .digest("hex"); // Generate the final hash in hexadecimal format
 
   // Store the generated salt in the user document
   user.salt = salt;
@@ -70,8 +71,8 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-// Define a static method 'matchPassword' on the userSchema for verifying user credentials
-userSchema.static("matchPassword", async function (email, password) {
+// Define a static method 'matchPasswordAndGenerateToken' on the userSchema for verifying user credentials
+userSchema.static("matchPasswordAndGenerateToken", async function (email, password) {
   // 'this' refers to the User model. Find the user by their email.
   const user = await this.findOne({ email });
 
@@ -92,9 +93,8 @@ userSchema.static("matchPassword", async function (email, password) {
   if (hashedPassword !== userProvidedHash)
     throw new Error("Incorrect Password");
 
-  // Return the user object excluding the password and salt for security
-  // Convert the Mongoose document to a plain object first
-  return { ...user.toObject(), password: undefined, salt: undefined };
+  const token = createTokenForUser(user);
+  return token;
 });
 
 // Create the User model from the defined schema
