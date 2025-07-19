@@ -56,5 +56,15 @@ router.post("/signup", async (req, res) => {
   return res.redirect("/");
 });
 
+// Define a GET route for '/logout'
+router.get("/logout", (req, res) => {
+  // Clear the 'token' cookie from the client
+  res
+    .clearCookie("token")
+
+    // Redirect the user to the homepage ('/')
+    .redirect("/");
+});
+
 // Export the router so it can be used in other parts of the application
 module.exports = router;

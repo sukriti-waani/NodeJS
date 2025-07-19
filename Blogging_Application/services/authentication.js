@@ -25,7 +25,7 @@ function createTokenForUser(user) {
 function validateToken(token) {
   // Verify and decode the token using the secret key
   // NOTE: Typo here: 'toke' should be 'token'
-  const payload = JWT.verify(toke, secret);
+  const payload = JWT.verify(token, secret);
   
   // Return the decoded payload if token is valid
   return payload;
