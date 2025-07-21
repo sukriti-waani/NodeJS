@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
 const userRoute = require("./routes/user");
+const blogRoute = require("./routes/blog");
+
 const {
   checkForAuthenticationCookie,
 } = require("./middlewares/authentication");
@@ -13,7 +15,8 @@ const PORT = 8000;
 
 mongoose
   .connect("mongodb://localhost:27017/blogify")
-  .then((e) => console.log("MongoDB Connected"));
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
@@ -30,5 +33,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoute);
+app.use("/blog", blogRoute);
 
 app.listen(PORT, () => console.log(`Server Started at PORT: ${PORT}`));
