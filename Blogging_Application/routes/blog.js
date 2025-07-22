@@ -12,6 +12,19 @@ router.get("/add-new", (req, res) => {
   });
 });
 
+router.get("/:id", async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  
+  if (!blog) {
+    return res.status(404).send("Blog not found");
+  }
+
+  return res.render("blog", {
+    blog,
+    user: req.user,
+  });
+});
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.resolve(`./public/uploads`));
