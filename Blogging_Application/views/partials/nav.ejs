@@ -1,9 +1,15 @@
 <nav
-  class="navbar navbar-expand-lg bg-body-tertiary bg-dark"
+  class="navbar navbar-expand-lg bg-dark navbar-dark shadow-sm py-2"
   data-bs-theme="dark"
 >
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Blogify</a>
+  <div class="container-fluid" style="max-width: 1200px">
+    <a
+      class="navbar-brand fw-bold text-uppercase fs-5"
+      href="#"
+      style="color: #00d9ff; letter-spacing: 0.5px"
+    >
+      🚀 Blogify
+    </a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,47 +21,121 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav ms-auto">
+        <!-- Home -->
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <% if(locals.user) {%>
-          <li class="nav-item">
-          <a class="nav-link" href="/blog/add-new">Add Blog</a>
+          <a
+            class="nav-link active fw-semibold px-2"
+            aria-current="page"
+            href="#"
+            style="transition: 0.3s; font-size: 0.95rem"
+          >
+            Home
+          </a>
         </li>
 
+        <% if(locals.user) { %>
+        <!-- Add Blog -->
+        <li class="nav-item">
+          <a
+            class="nav-link fw-semibold px-2"
+            href="/blog/add-new"
+            style="transition: 0.3s; font-size: 0.95rem"
+          >
+            ➕ Add Blog
+          </a>
+        </li>
+
+        <!-- User Dropdown -->
         <li class="nav-item dropdown">
           <a
-            class="nav-link dropdown-toggle"
+            class="nav-link dropdown-toggle fw-bold text-info px-2"
             href="#"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            style="transition: 0.3s; font-size: 0.95rem"
           >
-            Sukriti Waani
+            👤 <%= locals.user.fullName %>
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+          <ul
+            class="dropdown-menu dropdown-menu-dark animate__animated animate__fadeIn"
+          >
+            <li>
+              <a class="dropdown-item fw-bold text-danger" href="/user/logout"
+                >🚪 Logout</a
+              >
+            </li>
           </ul>
         </li>
 
-        <% } else {%>
-          <li class="nav-item">
-          <a class="nav-link" href="/user/signup">Create Account</a>
+        <% } else { %>
+        <!-- Signup -->
+        <li class="nav-item">
+          <a
+            class="nav-link fw-semibold px-2"
+            href="/user/signup"
+            style="transition: 0.3s; font-size: 0.95rem"
+          >
+            ✍️ Create Account
+          </a>
         </li>
-            <li class="nav-item">
-          <a class="nav-link" href="/user/signin">Signin</a>
+        <!-- Signin -->
+        <li class="nav-item">
+          <a
+            class="nav-link fw-semibold px-2"
+            href="/user/signin"
+            style="transition: 0.3s; font-size: 0.95rem"
+          >
+            🔑 Signin
+          </a>
         </li>
-          <% } %>
-        
+        <% } %>
       </ul>
     </div>
   </div>
 </nav>
 
-<% if(locals.error) {%>
-<div class="container mt-4">
-  <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+<% if(locals.error) { %>
+<div class="container mt-3" style="max-width: 800px">
+  <div
+    class="alert alert-danger fw-bold shadow-sm text-center py-2"
+    role="alert"
+  >
+    ⚠️ <%= locals.error %>
+  </div>
 </div>
 <% } %>
+
+<style>
+  /* Hover Effects */
+  .nav-link:hover {
+    color: #00d9ff !important;
+    transform: scale(1.03);
+    text-shadow: 0 0 4px rgba(0, 217, 255, 0.5);
+  }
+
+  .dropdown-menu {
+    border-radius: 6px;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar {
+    background: #0d0d0d !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+</style>
